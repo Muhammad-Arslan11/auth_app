@@ -29,4 +29,4 @@ verificationTokenExpiresAt: Date,
 
 }, {timestamps: true})
 
-export const UserModel = mongoose.model("User", UserSchema);
+export const userModel = mongoose.model("User", UserSchema);
