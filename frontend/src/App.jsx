@@ -7,62 +7,58 @@ import LoginPage from "./components/pages/LoginPage";
 import ResetPasswordPage from "./components/pages/ResetPasswordPage";
 import ForgotPasswordPage from "./components/pages/ForgotPassword";
 import EmailVerificationPage from "./components/pages/EmailVerificationPage";
-import { useAuthStore } from "./store/authStore";
+import { useAuthStore } from "./store/authStore.js";
 import LoadingSpinner from "./components/LoadingSpinner";
 
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 
-
- // protect routes that require authentication
+// ✅ Stable selectors for auth state
 const ProtectedRoute = ({ children }) => {
-	const { isAuthenticated, user } = useAuthStore();
+	const { isAuthenticated, user } = useAuthStore((state) => ({
+		isAuthenticated: state.isAuthenticated,
+		user: state.user,
+	}));
 
-	if (!isAuthenticated) {
-		return <Navigate to='/login' replace />;
-	}
-
-	if (!user.isVerified) {
-		return <Navigate to='/verify-email' replace />;
-	}
+	if (!isAuthenticated) return <Navigate to="/login" replace />;
+	if (!user?.isVerified) return <Navigate to="/verify-email" replace />;
 
 	return children;
 };
 
-
-// redirect authenticated users to the home page
 const RedirectAuthenticatedUser = ({ children }) => {
-	const { isAuthenticated, user } = useAuthStore();
+	const { isAuthenticated, user } = useAuthStore((state) => ({
+		isAuthenticated: state.isAuthenticated,
+		user: state.user,
+	}));
 
-	if (isAuthenticated && user.isVerified) {
-		return <Navigate to='/' replace />;
+	if (isAuthenticated && user?.isVerified) {
+		return <Navigate to="/" replace />;
 	}
 
 	return children;
 };
 
 function App() {
-
-const { isCheckingAuth, checkAuth } = useAuthStore();
+	// only track loading state here
+	const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
 	useEffect(() => {
-		checkAuth();
-	}, [checkAuth]);
+		// ✅ avoid unstable function references
+		useAuthStore.getState().checkAuth();
+	}, []);
 
 	if (isCheckingAuth) return <LoadingSpinner />;
 
- return (
-		<div
-			className='min-h-screen bg-gradient-to-br
-    from-gray-900 via-green-900 to-emerald-900 flex items-center justify-center relative overflow-hidden'
-		>
-			<FloatingShape color='bg-green-500' size='w-64 h-64' top='-5%' left='10%' delay={0} />
-			<FloatingShape color='bg-emerald-500' size='w-48 h-48' top='70%' left='80%' delay={5} />
-			<FloatingShape color='bg-lime-500' size='w-32 h-32' top='40%' left='-10%' delay={2} />
+	return (
+		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-emerald-900 flex items-center justify-center relative overflow-hidden">
+			<FloatingShape color="bg-green-500" size="w-64 h-64" top="-5%" left="10%" delay={0} />
+			<FloatingShape color="bg-emerald-500" size="w-48 h-48" top="70%" left="80%" delay={5} />
+			<FloatingShape color="bg-lime-500" size="w-32 h-32" top="40%" left="-10%" delay={2} />
 
 			<Routes>
 				<Route
-					path='/'
+					path="/"
 					element={
 						<ProtectedRoute>
 							<DashboardPage />
@@ -70,7 +66,7 @@ const { isCheckingAuth, checkAuth } = useAuthStore();
 					}
 				/>
 				<Route
-					path='/signup'
+					path="/signup"
 					element={
 						<RedirectAuthenticatedUser>
 							<SignUpPage />
@@ -78,33 +74,31 @@ const { isCheckingAuth, checkAuth } = useAuthStore();
 					}
 				/>
 				<Route
-					path='/login'
+					path="/login"
 					element={
 						<RedirectAuthenticatedUser>
 							<LoginPage />
 						</RedirectAuthenticatedUser>
 					}
 				/>
-				<Route path='/verify-email' element={<EmailVerificationPage />} />
+				<Route path="/verify-email" element={<EmailVerificationPage />} />
 				<Route
-					path='/forgot-password'
+					path="/forgot-password"
 					element={
 						<RedirectAuthenticatedUser>
 							<ForgotPasswordPage />
 						</RedirectAuthenticatedUser>
 					}
 				/>
-
 				<Route
-					path='/reset-password/:token'
+					path="/reset-password/:token"
 					element={
 						<RedirectAuthenticatedUser>
 							<ResetPasswordPage />
 						</RedirectAuthenticatedUser>
 					}
 				/>
-				{/* catch all routes */}
-				<Route path='*' element={<Navigate to='/' replace />} />
+				<Route path="*" element={<Navigate to="/" replace />} />
 			</Routes>
 			<Toaster />
 		</div>
