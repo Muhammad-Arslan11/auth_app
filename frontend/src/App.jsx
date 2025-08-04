@@ -15,22 +15,18 @@ import { useEffect } from "react";
 
 // ✅ Stable selectors for auth state
 const ProtectedRoute = ({ children }) => {
-	const { isAuthenticated, user } = useAuthStore((state) => ({
-		isAuthenticated: state.isAuthenticated,
-		user: state.user,
-	}));
+	const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+	const user = useAuthStore((state) => state.user);
 
 	if (!isAuthenticated) return <Navigate to="/login" replace />;
-	if (!user?.isVerified) return <Navigate to="/verify-email" replace />;
+	if (user && !user.isVerified) return <Navigate to="/verify-email" replace />;
 
 	return children;
 };
 
 const RedirectAuthenticatedUser = ({ children }) => {
-	const { isAuthenticated, user } = useAuthStore((state) => ({
-		isAuthenticated: state.isAuthenticated,
-		user: state.user,
-	}));
+	const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+	const user = useAuthStore((state) => state.user);
 
 	if (isAuthenticated && user?.isVerified) {
 		return <Navigate to="/" replace />;
@@ -38,6 +34,7 @@ const RedirectAuthenticatedUser = ({ children }) => {
 
 	return children;
 };
+
 
 function App() {
 	// only track loading state here

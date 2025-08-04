@@ -1,5 +1,8 @@
-import  React, {useState, useRef} from 'react';
+import  React, {useState, useRef, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
+import { useAuthStore } from '../../store/authStore';
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 
 function EmailVerificationPage() {
@@ -11,6 +14,8 @@ function EmailVerificationPage() {
    const handleSubmit = async (e) => {
 		e.preventDefault();
 		const verificationCode = code.join("");
+		console.log("Verifying with code:", verificationCode);
+
 		try {
 			await verifyEmail(verificationCode);
 			navigate("/");

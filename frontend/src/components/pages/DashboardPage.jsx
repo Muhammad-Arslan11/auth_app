@@ -3,10 +3,11 @@ import { useAuthStore } from "../../store/authStore";
 import { formatDate } from "../../utils/date.js";
 
 const DashboardPage = () => {
-	const { user, logout } = useAuthStore();
+	const { user, signout } = useAuthStore();
+	console.log(user);
 
 	const handleLogout = () => {
-		logout();
+		signout();
 	};
 	return (
 		<motion.div
