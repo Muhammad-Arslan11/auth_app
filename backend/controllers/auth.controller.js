@@ -119,7 +119,8 @@ export const forgotPassword = async (req, res)=>{
 	await user.save();
 
 		// send email
-		await sendPasswordResetEmail(user?.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+        console.log(process.env.CLIENT_URL);
+		await sendPasswordResetEmail(user?.email, `${process.env.CLIENT_URL}/api/reset-password/${resetToken}`);
 
 		res.status(200).json({ success: true, message: "Password reset link sent to your email" });
         return;
@@ -137,7 +138,9 @@ export const resetPassword = async (req, res) => {
 		const { token } = req.params;
 		const { password } = req.body;
 
+
       console.log("Incoming token:", JSON.stringify(token));
+      console.log("Incoming password:", JSON.stringify(password));
 
 		const user = await userModel.findOne({
 			resetPasswordToken: token,
