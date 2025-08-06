@@ -111,12 +111,14 @@ export const forgotPassword = async (req, res)=>{
     // generate token 
     const resetToken = crypto.randomBytes(20).toString('hex');
     const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
-    console.log('resetToken from forgotPassword: ', resetToken);
+    // console.log('resetToken from forgotPassword: ', resetToken);
 
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpiresAt = resetTokenExpiresAt; 
    
+    // console.log(user, 'before saved');
 	await user.save();
+    // console.log(user, 'after saved');
 
 		// send email
         console.log(process.env.CLIENT_URL);
@@ -144,7 +146,8 @@ export const resetPassword = async (req, res) => {
 			resetPasswordToken: token,
 			resetPasswordExpiresAt: { $gt: Date.now() },
 		});
-        console.log(user);
+        //
+        // console.log(user);  // null
       
 
 		if (!user) {
