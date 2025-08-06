@@ -22,7 +22,7 @@ isVerified: {
     type: Boolean,
     default: false,
 },
-resetpasswordToken : String,
+resetPasswordToken : String,
 verificationToken: String,
 resetPasswordExpiresAt: Date,
 verificationTokenExpiresAt: Date,
