@@ -120,7 +120,7 @@ export const forgotPassword = async (req, res)=>{
 
 		// send email
         console.log(process.env.CLIENT_URL);
-		await sendPasswordResetEmail(user?.email, `${process.env.CLIENT_URL}/api/reset-password/${resetToken}`);
+		await sendPasswordResetEmail(user?.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`);
 
 		res.status(200).json({ success: true, message: "Password reset link sent to your email" });
         return;
@@ -139,13 +139,12 @@ export const resetPassword = async (req, res) => {
 		const { password } = req.body;
 
 
-      console.log("Incoming token:", JSON.stringify(token));
-      console.log("Incoming password:", JSON.stringify(password));
-
+     // this query is causing issue which results in error msg: Invalid or expired reset token
 		const user = await userModel.findOne({
 			resetPasswordToken: token,
 			resetPasswordExpiresAt: { $gt: Date.now() },
 		});
+        console.log(user);
       
 
 		if (!user) {
@@ -163,6 +162,7 @@ export const resetPassword = async (req, res) => {
 		await sendResetSuccessEmail(user.email);
 
 		res.status(200).json({ success: true, message: "Password reset successful" });
+           return;
 	} catch (error) {
 		console.log("Error in resetPassword ", error);
 		res.status(400).json({ success: false, message: error.message });
