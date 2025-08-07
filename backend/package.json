@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "backend/index.js",
+  "type": "module",
   "scripts": {
-    "nodemon": "./backend/index.js"
+    "start": "node backend/index.js",
+    "build": "echo 'no build step'",
+    "dev": "nodemon backend/index.js"
   },
   "keywords": [],
   "author": "",
-  "type": "module",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
