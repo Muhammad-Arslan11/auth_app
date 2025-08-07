@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: 'https://auth-app-eta-beige.vercel.app',
     credentials: true, // <-- important
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -20,7 +20,7 @@ app.use(cors(corsOptions));
 
 app.use("/api/", router);
 
-const port  = 3000;
+const port  = process.env.PORT || 3000;
 
 app.listen(port, ()=>{
     connectDB();
