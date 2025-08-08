@@ -21,6 +21,7 @@ app.use(cors(corsOptions));
 // app.use("", router);
 app.get('/',(req, res)=>{
     console.log('api is responding. might be any other error');
+    res.send("hello from Railway!");
 })
 
 const port  = process.env.PORT || 3000;
