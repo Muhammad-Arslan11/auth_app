@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 
-app.use("/api/", router);
+app.use("", router);
 
 const port  = process.env.PORT || 3000;
 
