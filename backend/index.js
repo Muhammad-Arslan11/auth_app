@@ -18,11 +18,11 @@ const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 
-app.use("", router);
-// app.get('/',(req, res)=>{
-//     console.log('api is responding. might be any other error');
-//     res.send("hello from Railway!");
-// })
+// app.use("", router);
+app.get('/',(req, res)=>{
+    console.log('api is responding. might be any other error');
+    res.send("hello from Railway!");
+})
    
 const PORT  = process.env.PORT || 3000;
 
