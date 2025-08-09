@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 const corsOptions = {
-    origin: 'https://auth-app-eta-beige.vercel.app',
+    origin: process.env.CLIENT_URL,
     credentials: true, // <-- important
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
