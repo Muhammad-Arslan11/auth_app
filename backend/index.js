@@ -23,10 +23,25 @@ app.get('/',(req, res)=>{
     console.log('api is responding. might be any other error');
     res.send("hello from Railway!");
 })
-
+   
 const PORT  = process.env.PORT || 3000;
 
-app.listen(PORT, '0.0.0.0', () => {
-    connectDB();
-  console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    console.log('Connecting to database...');
+    await connectDB();
+    console.log('✅ Database connected successfully');
+
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error('❌ Failed to connect to database:');
+    console.error(error.message);
+    process.exit(1); // Exit so Railway marks the deployment as failed
+  }
+};
+
+startServer();
+
